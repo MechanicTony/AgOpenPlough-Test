@@ -18,3 +18,13 @@ C:\Users\Tony\Documents\AgOpenGPS\AgOpenGPS-5.5.0_PloughV1\SourceCode\AgDiag\Sou
 C:\Users\Tony\Documents\AgOpenGPS\AgOpenGPS-5.5.0_PloughV1\SourceCode\AgDiag\Source\obj\Debug\AgDiag.exe
 C:\Users\Tony\Documents\AgOpenGPS\AgOpenGPS-5.5.0_PloughV1\SourceCode\AgDiag\Source\obj\Debug\AgDiag.pdb
 C:\Users\Tony\Documents\AgOpenGPS\AgOpenGPS-5.5.0_PloughV1\SourceCode\AgDiag\Source\obj\Debug\AgDiag.csproj.AssemblyReference.cache
+C:\Users\Tony\Documents\GitHub\AgOpenPlough-Test\AgOpenGPS_Plough\AgOpenGPS_v5\AgDiag.exe.config
+C:\Users\Tony\Documents\GitHub\AgOpenPlough-Test\AgOpenGPS_Plough\AgOpenGPS_v5\AgDiag.exe
+C:\Users\Tony\Documents\GitHub\AgOpenPlough-Test\AgOpenGPS_Plough\AgOpenGPS_v5\AgDiag.pdb
+C:\Users\Tony\Documents\GitHub\AgOpenPlough-Test\AgOpenGPS_Plough\SourceCode\AgDiag\Source\obj\Debug\AgDiag.csproj.AssemblyReference.cache
+C:\Users\Tony\Documents\GitHub\AgOpenPlough-Test\AgOpenGPS_Plough\SourceCode\AgDiag\Source\obj\Debug\AgDiag.FormLoop.resources
+C:\Users\Tony\Documents\GitHub\AgOpenPlough-Test\AgOpenGPS_Plough\SourceCode\AgDiag\Source\obj\Debug\AgDiag.Properties.Resources.resources
+C:\Users\Tony\Documents\GitHub\AgOpenPlough-Test\AgOpenGPS_Plough\SourceCode\AgDiag\Source\obj\Debug\AgDiag.csproj.GenerateResource.cache
+C:\Users\Tony\Documents\GitHub\AgOpenPlough-Test\AgOpenGPS_Plough\SourceCode\AgDiag\Source\obj\Debug\AgDiag.csproj.CoreCompileInputs.cache
+C:\Users\Tony\Documents\GitHub\AgOpenPlough-Test\AgOpenGPS_Plough\SourceCode\AgDiag\Source\obj\Debug\AgDiag.exe
+C:\Users\Tony\Documents\GitHub\AgOpenPlough-Test\AgOpenGPS_Plough\SourceCode\AgDiag\Source\obj\Debug\AgDiag.pdb
