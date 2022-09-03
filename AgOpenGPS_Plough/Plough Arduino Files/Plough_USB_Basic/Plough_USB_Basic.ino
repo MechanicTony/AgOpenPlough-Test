@@ -3,7 +3,7 @@
 Simple example USB Nano code for Plough control 
 
 Inputs
-- Width sensor connected to A0
+- Width sensor connected to Nano A0 or ADC1115 A0 for more resolution
 - Allow auto width toggle switch conneced to A1
 - Allow auto lift toggle switch conneced to A2
 
@@ -17,6 +17,8 @@ Outputs
 
 #include <EEPROM.h> 
 #define EEP_Ident 0x5405
+#include "zADS1115.h"
+ADS1115_lite adc(ADS1115_DEFAULT_ADDRESS);     // Use this for the 16-bit version ADS1115
 
 //Relay Outputs
 #define relayIn 5                                    
@@ -32,7 +34,13 @@ Outputs
 #define autoWidthPin A1
 
 //Plough width input
-#define ploughWidthPin A0     
+#define ploughWidthPin A0    
+ 
+bool useNanoAnalog = true;
+//bool useNanoAnalog = false;
+
+//bool invertWidth = true;
+bool invertWidth = false;
 
 #define deadBand 50 //Deadband in mm that the plough is near enough
 
@@ -112,7 +120,8 @@ void(* resetFunc) (void) = 0;
 void setup()
 {
   Serial.begin(38400);
-
+  Wire.begin();
+  
   EEPROM.get(0, EEread);     // read identifier
 
   if (EEread != EEP_Ident)   // check on first start and write EEPROM
@@ -124,6 +133,12 @@ void setup()
   {
       EEPROM.get(6, aogConfig);
   }
+
+    if(!useNanoAnalog)
+    {
+      adc.setSampleRate(ADS1115_REG_CONFIG_DR_128SPS); //128 samples per second
+      adc.setGain(ADS1115_REG_CONFIG_PGA_6_144V);  
+    }
                               
   pinMode(relayIn, OUTPUT);                                           
   pinMode(relayOut, OUTPUT); 
@@ -248,8 +263,21 @@ void loop()
       digitalWrite(relayUp,!relayON);
     }    
            
+//******************************************************************************************
+
+    if(!useNanoAnalog)
+    {
+     adc.setMux(ADS1115_REG_CONFIG_MUX_SINGLE_0);        
+     steeringPosition = adc.getConversion();    
+     adc.triggerConversion();//ADS1115 Single Mode 
+        
+     steeringPosition = (steeringPosition >> 1); //bit shift by 2  0 to 13610 is 0 to 5v
+    }
+    else
+    {
     //Get the plogh width (Just standard Nano analog pin)
      steeringPosition = analogRead(ploughWidthPin);    
+    }
      steerAngleActual = steeringPosition;
      steerAngleActual = constrain(steerAngleActual,aogConfig.minRaw,aogConfig.maxRaw);
      steerAngleActual = map(steerAngleActual,aogConfig.minRaw,aogConfig.maxRaw,aogConfig.minRealMM,aogConfig.maxRealMM); 

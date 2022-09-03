@@ -1,4 +1,18 @@
+/*
 
+Example USB Nano code for Plough control 
+Use with Nano/Uno & MCP2515 CANBUS Shield connected to Fendt K-BUS
+
+Inputs
+- Width sensor connected to Nano A0 or ADC1115 A0 for more resolution
+- Allow auto width toggle switch conneced to A1
+- Allow auto lift toggle switch conneced to A2
+
+Outputs = Fendt K-BUS
+- Plough IN/OUT = drive handle left hydralic rocker (Green) 
+- Plough UP/DOWM = big GO/END
+
+*/
 #include <mcp_can.h>                                         
 #include <SPI.h>
 #include <EEPROM.h> 
@@ -11,8 +25,8 @@ ADS1115_lite adc(ADS1115_DEFAULT_ADDRESS);     // Use this for the 16-bit versio
 #define CAN0_INT 2        // Interrupt pin (Check CAN Board)    Standard = 2
 MCP_CAN CAN0(10);         // Chip Select pin (Check CAN Board)  Standard = 10 or 9
 
-//#define ModuleSpeed MCP_16MHZ   // Big UNO shaped board
-#define ModuleSpeed MCP_8MHZ    // Small blue CAN board                                     
+#define ModuleSpeed MCP_16MHZ   // Big UNO shaped board
+//#define ModuleSpeed MCP_8MHZ    // Small blue CAN board                                     
 
 #define Model 0           // Model 0 = Com2&3 Fendt 100kbs K-Bus
                           // Model 1 = SCR/S4 Fendt 250kbs K-Bus  
@@ -22,7 +36,13 @@ MCP_CAN CAN0(10);         // Chip Select pin (Check CAN Board)  Standard = 10 or
 #define autoWidthPin A1
 
 //Plough width input
-#define ploughWidthPin A0     
+#define ploughWidthPin A0  
+
+bool useNanoAnalog = true;
+//bool useNanoAnalog = false;
+
+//bool invertWidth = true;
+bool invertWidth = false;
 
 #define deadBand 50 //Deadband in mm that the plough is near enough                 
 
@@ -135,8 +155,11 @@ void setup()
           EEPROM.get(6, aogConfig);
       }
 
+    if(!useNanoAnalog)
+    {
     adc.setSampleRate(ADS1115_REG_CONFIG_DR_128SPS); //128 samples per second
     adc.setGain(ADS1115_REG_CONFIG_PGA_6_144V);
+    }
       
 // Fendt Com2&3 is 100kbs K-BUS & CAN ID:61F        
   if(Model == 0)  
@@ -340,14 +363,20 @@ void loop()
     bitStateOld = bitState;
 
 //******************************************************************************************
-    
+
+    if(!useNanoAnalog)
+    {
      adc.setMux(ADS1115_REG_CONFIG_MUX_SINGLE_0);        
      steeringPosition = adc.getConversion();    
      adc.triggerConversion();//ADS1115 Single Mode 
         
      steeringPosition = (steeringPosition >> 1); //bit shift by 2  0 to 13610 is 0 to 5v
-     //Serial.println(steeringPosition);
-     
+    }
+    else
+    {
+    //Get the plogh width (Just standard Nano analog pin)
+     steeringPosition = analogRead(ploughWidthPin);    
+    }
      steerAngleActual = steeringPosition;
      steerAngleActual = constrain(steerAngleActual,aogConfig.minRaw,aogConfig.maxRaw);
      steerAngleActual = map(steerAngleActual,aogConfig.minRaw,aogConfig.maxRaw,aogConfig.minRealMM,aogConfig.maxRealMM); 
