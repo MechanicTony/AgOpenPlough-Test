@@ -41,9 +41,6 @@ MCP_CAN CAN0(10);         // Chip Select pin (Check CAN Board)  Standard = 10 or
 bool useNanoAnalog = true;
 //bool useNanoAnalog = false;
 
-//bool invertWidth = true;
-bool invertWidth = false;
-
 #define deadBand 50 //Deadband in mm that the plough is near enough                 
 
 bool deBug = false;                         
@@ -378,7 +375,12 @@ void loop()
      steeringPosition = analogRead(ploughWidthPin);    
     }
      steerAngleActual = steeringPosition;
-     steerAngleActual = constrain(steerAngleActual,aogConfig.minRaw,aogConfig.maxRaw);
+     if(aogConfig.minRaw < aogConfig.maxRaw){
+      steerAngleActual = constrain(steerAngleActual,aogConfig.minRaw,aogConfig.maxRaw);
+     }
+     else{
+      steerAngleActual = constrain(steerAngleActual,aogConfig.maxRaw,aogConfig.minRaw);
+     }
      steerAngleActual = map(steerAngleActual,aogConfig.minRaw,aogConfig.maxRaw,aogConfig.minRealMM,aogConfig.maxRealMM); 
      
      ploughWidth = steerAngleActual;
