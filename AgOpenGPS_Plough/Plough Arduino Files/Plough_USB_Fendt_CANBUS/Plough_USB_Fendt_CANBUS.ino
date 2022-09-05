@@ -385,7 +385,7 @@ void loop()
      
      ploughWidth = steerAngleActual;
      
-     if(lineDistance > 30000) 
+     if(abs(lineDistance) > 30000) 
      {
       ploughError = 0;
       targetWidth = workingWidth;
@@ -429,7 +429,7 @@ void loop()
       ploughMode = 0; //Section not ON
      }   
 
-     if (lineDistance > 30000){
+     if (abs(lineDistance) > 30000){
       ploughMode = 8; //No field, No green steering wheel, no AB line
      }        
 
@@ -604,7 +604,7 @@ void loop()
               tramline = Serial.read();  //bit 0 is right bit 1 is left
 
               //just get the rest of bytes
-              lineDistance = ((uint16_t)(Serial.read() | Serial.read() << 8));
+              lineDistance = ((int16_t)(Serial.read() | Serial.read() << 8));
 
               relayLo = Serial.read();          // read relay control from AgOpenGPS
               relayHi = Serial.read();
